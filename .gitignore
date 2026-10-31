@@ -1,0 +1,76 @@
+# ---------- Secrets & credentials (NEVER commit) ----------
+.env
+.env.*
+!.env.example
+!.env.sample
+*.env
+server/.env
+client/.env.local
+client/.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+secrets/
+credentials.json
+service-account*.json
+.secrets
+.aws/
+.ssh/
+.npmrc
+.pypirc
+
+# ---------- Server (FastAPI / LangGraph) ----------
+server/__pycache__/
+server/**/__pycache__/
+server/.venv/
+server/venv/
+server/env/
+server/.pytest_cache/
+server/.mypy_cache/
+server/.ruff_cache/
+server/*.egg-info/
+server/dist/
+server/build/
+server/.coverage
+server/htmlcov/
+server/users.json
+server/verdict_log.json
+server/*.db
+server/*.sqlite
+server/*.sqlite3
+server/*.log
+server/.langgraph_api/
+server/checkpoints/
+
+# ---------- Client (Next.js / shadcn / Tailwind) ----------
+client/node_modules/
+client/.next/
+client/out/
+client/.vercel/
+client/.turbo/
+client/*.tsbuildinfo
+client/next-env.d.ts
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+
+# ---------- Catch-alls (in case tools run from the repo root) ----------
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+*.log
+
+# ---------- Editors & OS ----------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---------- Claude Code (local settings may hold secrets) ----------
+.claude/settings.local.json
+.claudeignore

@@ -4,7 +4,7 @@
 
 > **Not investment advice.** Every generated answer carries a mandatory disclaimer. This project demonstrates agentic architecture; it is not a trading tool.
 
-Built on the agent backend from [vj0246/FinIntel](https://github.com/vj0246/FinIntel), with a new Next.js frontend.
+
 
 ---
 

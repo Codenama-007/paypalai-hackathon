@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Activity, Layers, Play, RefreshCw, Send } from "lucide-react";

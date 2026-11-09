@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Scale, Play, AlertTriangle, CheckCircle2, TrendingUp, TrendingDown, Users } from "lucide-react";

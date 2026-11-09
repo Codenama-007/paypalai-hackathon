@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Shield, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { registerUser } from "@/lib/api";
 import { setAuth } from "@/lib/auth";
 
@@ -45,8 +45,9 @@ export default function RegisterPage() {
         // If registration does not auto-login, redirect to login
         router.push("/login?registered=true");
       }
-    } catch (err: any) {
-      setError(err.message || "Failed to create account. Please try again.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create account. Please try again.";
+      setError(msg);
     } finally {
       setLoading(false);
     }

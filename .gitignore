@@ -74,3 +74,6 @@ Thumbs.db
 # ---------- Claude Code (local settings may hold secrets) ----------
 .claude/settings.local.json
 .claudeignore
+
+
+plan.md

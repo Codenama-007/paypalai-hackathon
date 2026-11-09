@@ -1,0 +1,31 @@
+export interface StockQuote {
+  ticker: string;
+  name: string;
+  sector: string;
+  price: number;
+  prev_close: number;
+  change: number;
+  change_pct: number;
+  day_high: number;
+  day_low: number;
+  high_52w: number;
+  low_52w: number;
+  volume: number;
+  mcap_cr: number;
+  pe: number;
+  sector_pe: number;
+  pb: number;
+  div_yield: number;
+  roe: number;
+  roce: number;
+  debt_equity: number;
+  rsi: number;
+  dma_50: number;
+  dma_200: number;
+  trend: string;
+  beta: number;
+  sharpe: number;
+  volatility_1y: number;
+  max_drawdown: number;
+  source: string;
+}

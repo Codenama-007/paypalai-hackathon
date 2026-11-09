@@ -58,6 +58,6 @@ Agentic equity research desk for Indian (NSE) stocks. Specialised LLM agents wor
 - Chat requires a ticker; the backend returns 422 without one
 
 ## Testing
-- Backend: `pytest` for engines and guardrails (mock yfinance and Groq)
+- Backend: `pytest` for engines and guardrails (mock yfinance and Groq).
 - Frontend: smoke-test each tab against mocked SSE streams
 - Test approval flows end to end: start, pause, resume, final

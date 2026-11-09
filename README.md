@@ -1,313 +1,247 @@
-# FinIntel
+<div align="center">FinIntel
+Your AI-powered equity research desk for Indian markets.
+Research with specialist agents. Stay in control with human approval. Trust the output with compliance-first guardrails.
+<p>
+  <img src="https://img.shields.io/badge/AI-LangGraph-6C5CE7?style=for-the-badge" alt="LangGraph" />
+  <img src="https://img.shields.io/badge/API-FastAPI-009688?style=for-the-badge" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Web-Next.js-111111?style=for-the-badge" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Language-Python%203.11+-3776AB?style=for-the-badge" alt="Python" />
+  <img src="https://img.shields.io/badge/LLM-Groq-F55036?style=for-the-badge" alt="Groq" />
+</p>
+Overview · Capabilities · Architecture · Run locally · API · Status
+</div>Important: FinIntel is an educational/research software project, not a broker, trading system, or source of investment advice. Generated analysis must be independently verified. The repository's design documents describe the intended product and architecture; not every listed capability is currently implemented.
 
-**An agentic equity research desk for Indian (NSE) stocks.** Specialised LLM agents work on live market data, pause for human approval before acting, and pass every answer through a compliance pipeline.
+✦ The idea
+Equity research is fragmented. Investors often jump between market data, financial statements, news, screeners, portfolio spreadsheets, and backtesting tools before they can make sense of a stock.
 
-> **Not investment advice.** Every generated answer carries a mandatory disclaimer. This project demonstrates agentic architecture; it is not a trading tool.
+FinIntel brings that research workflow into one workspace. Specialised agents support research, risk analysis, portfolio review, and market discovery. The user remains in control: agent workflows can pause for approval, and generated responses are designed to pass through a compliance pipeline.
+Design principles
+Principle	What it means
+Human in control	Agent workflows pause at approval gates. Users can approve, reject, stop, or redirect.
+Grounded analysis	Market metrics are calculated in Python; the LLM interprets and explains results.
+Transparent data	Live data and offline sample data are explicitly distinguished.
+Safer outputs	Input validation, prompt-injection checks, output screening, PII scrubbing, and disclaimers.
+Observable workflows	Agent progress is streamed to the client using Server-Sent Events (SSE).
 
 
-
----
-
-## Table of contents
-- [Problem statement](#problem-statement)
-- [Features](#features)
-- [Tech stack](#tech-stack)
-- [Architecture](#architecture)
-- [Project structure](#project-structure)
-- [Getting started](#getting-started)
-- [Environment variables](#environment-variables)
-- [Pages and routes](#pages-and-routes)
-- [API reference](#api-reference)
-- [How the agents work](#how-the-agents-work)
-- [Compliance and safety](#compliance-and-safety)
-- [Development workflow](#development-workflow)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Troubleshooting](#troubleshooting)
-- [Roadmap](#roadmap)
-- [Credits and license](#credits-and-license)
-
----
-
-## Problem statement
-
-Retail investors in Indian equities must stitch together scattered data, news and analysis by hand. FinIntel is an agentic AI desk where specialised LLM agents research NSE stocks on live data, with human approval at each decision and compliance guardrails on every answer.
-
-## Features
-
-| Tab | What it does |
-|---|---|
-| **Analyst** | Pick a stock and a task. The agent proposes one step at a time; you Approve, Redirect or Stop. |
-| **Chat** | A ReAct agent with 31 tools. It answers instantly, self-reviews its draft, and screens every reply. Supports PDF/Word Q&A. |
-| **Brief** | A morning brief from your watchlist, global cues (US, Asia, USD/INR, Brent, Gold) and Indian indices. |
-| **Discover** | Plain-English stock screens, parsed into validated filters and swept over a curated NSE universe. |
-| **Portfolio** | Paste holdings or upload a broker CSV. Parallel per-stock audit, rebalance approval gate, stress test, paper-trading ledger. |
-| **War Room** | A Chief Analyst plans, specialists run in parallel, a Bull and a Bear argue, and a Judge rules with your sign-off. |
-| **Ecosystem** | Competitors, customers, suppliers and partners, with competitors priced live. |
-| **Report** | One click runs every engine and produces a single research note. |
-| **Backtest** | Lumpsum vs SIP vs NIFTY 50, with dividends, brokerage, step-up SIPs, XIRR, CAGR and drawdown. |
-
-Also included: email/password accounts, a five-question **risk profile** that every agent judges its answers against, and a track record that re-scores every approved verdict.
-
-## Tech stack
-
-**Client** (`client/`)
-- Next.js (App Router), TypeScript
-- Tailwind CSS, shadcn/ui
-- react-hook-form + zod for forms
-- recharts for charts
-
-**Server** (`server/`)
-- Python 3.11+, FastAPI, Uvicorn
-- LangGraph (checkpointed `StateGraph`, `interrupt()` approval gates)
-- LangChain (`langchain-core`, `langchain-groq`)
-- Groq LLMs with multi-key failover
-- yfinance, Screener.in and NSE data, with offline sample-data fallback
-- Optional Supabase for persistent accounts
-
-## Architecture
-
+◈ What you can do
+The product design defines these research workspaces:
+<table>
+  <tr>
+    <td width="50%">
+      <h3>◉ Analyst</h3>
+      Give an agent a stock and a research task. Review its proposed steps and decide whether it can continue.
+    </td>
+    <td width="50%">
+      <h3>⌘ Research Chat</h3>
+      Ask ticker-specific questions. A ReAct agent can use research tools, review its draft, and screen its response.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>◷ Market Brief</h3>
+      Bring watchlist signals and broader market cues into a concise briefing.
+    </td>
+    <td>
+      <h3>⌕ Discover</h3>
+      Translate a natural-language stock-screening request into validated filters and a universe scan.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>▤ Portfolio</h3>
+      Review holdings, concentration, risk, and stress scenarios; inspect proposed rebalance actions before approval.
+    </td>
+    <td>
+      <h3>⚖ War Room</h3>
+      Coordinate specialist analysis, Bull/Bear arguments, and a judge that produces a reasoned verdict for user review.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>⌘ Ecosystem</h3>
+      Explore relationships between a company, its competitors, customers, suppliers, and partners.
+    </td>
+    <td>
+      <h3>▧ Reports & Backtests</h3>
+      Combine research engines into a report and compare historical strategies using calculated performance metrics.
+    </td>
+  </tr>
+</table>⌘ How it works
+System architecture
+```mermaid
+flowchart TB
+    U[User] --> WEB[Next.js workspace]
+    WEB <-->|HTTP + SSE| API[FastAPI API]
+    API --> G[Guardrails and validation]
+    G --> ORCH[LangGraph orchestration]
+    ORCH --> CHAT[Research chat]
+    ORCH --> TASK[Task agent]
+    ORCH --> WAR[War Room]
+    ORCH --> PORT[Portfolio agent]
+    ORCH --> ENGINES[Discover · Brief · Report · Backtest]
+    CHAT --> DATA[Market and company data layer]
+    TASK --> DATA
+    WAR --> DATA
+    PORT --> DATA
+    ENGINES --> DATA
+    DATA --> SOURCES[yfinance · Screener.in · NSE]
+    ORCH --> LLM[Groq-hosted LLM]
+    ORCH --> CHECK[Compliance screening]
+    CHECK --> WEB
+    ORCH -. checkpoint / resume .-> HUMAN[Human approval]
+    HUMAN -. decision .-> ORCH
 ```
-            Next.js client (App Router, shadcn, Tailwind)
-                          │  fetch + Server-Sent Events
-                          ▼
-              FastAPI  (rate-limited, guarded)
-  ┌──────────┬──────────┬──────────┬──────────┬──────────┐
- chat       task       war_room   portfolio  discover / brief /
- (ReAct)    agent      (graph)    (graph)    report / backtest /
-            (graph)                          ecosystem / stress
-  └──────────┴──────────┴──────────┴──────────┴──────────┘
-                          │
-        market.py · quant.py · screener.py · nse.py
-        (cached, with sample-data fallback)
-                          │
-        guardrails · groq_pool · llm_cache · session_registry · auth
-```
+The approval loop
+1. The client starts a workflow with a unique thread UUID.
+2. LangGraph executes the workflow and streams progress events to the browser.
+3. At a decision point, the graph calls interrupt() and checkpoints its state.
+4. The user approves, rejects, stops, or provides revision instructions.
+5. The client resumes the same graph using the same thread UUID.
+6. The workflow continues and streams its result.
+Separation of responsibilities
+- Python computes: volatility, Sharpe ratio, beta, RSI, moving averages, drawdown, stress impacts, CAGR, and XIRR.
+- The LLM interprets: it explains calculated values, compares evidence, and produces readable research narratives.
+- The compliance layer checks: model output is screened before it is returned to the user.
+- The UI communicates: stream status, approval requests, disclaimers, and whether the underlying data is live or sample data.
+⚙ Technology
+Layer	Technologies
+Frontend	Next.js App Router, React, TypeScript
+UI	Tailwind CSS, shadcn/ui
+Backend API	Python 3.11+, FastAPI, Uvicorn
+Agent orchestration	LangGraph, LangChain
+Model provider	Groq
+Market data	yfinance, Screener.in, NSE (best-effort sources)
+Persistence	Supabase (optional; local development fallback described in the backend spec)
+Streaming	Server-Sent Events (SSE)
 
-Key ideas:
-- **Streaming:** every agent endpoint streams events as `data: {json}\n\n` and ends with `{"type":"done"}`.
-- **Human-in-the-loop:** gates use LangGraph's native `interrupt()`. The graph checkpoints and the stream ends at a `propose` or `approval_request` event. The client resumes with the same `thread` UUID on the matching resume endpoint.
-- **Deterministic maths:** volatility, Sharpe, beta, RSI, drawdown, stress shocks and backtest CAGR/XIRR are all computed in Python. The LLM only interprets and narrates.
-- **Honest data labelling:** live vs sample data is always labelled; sample data is never silently presented as live.
 
-## Project structure
-
-```
+▣ Repository layout
 .
-├── client/                  # Next.js app
-│   ├── app/
-│   │   ├── (marketing)/     # landing page
-│   │   ├── (auth)/          # login, register
-│   │   ├── (app)/app/       # main agent workspace
-│   │   └── api/auth/        # route handlers that proxy auth to FastAPI
+├── client/
+│   ├── app/                 # Next.js App Router
 │   ├── components/
-│   │   ├── ui/              # shadcn primitives
-│   │   ├── agents/          # one component per tab
-│   │   └── shared/          # ApprovalGate, Timeline, PriceChart, TickerSearch
-│   ├── lib/                 # api.ts, auth.ts, useEventStream.ts
-│   └── middleware.ts        # protects /app
-├── server/                  # FastAPI + agents
-│   ├── app_multi.py         # endpoints
-│   ├── chat_agent.py        # ReAct chat, 31 tools
-│   ├── agent_task.py        # step-by-step task agent
-│   ├── agent_multi.py       # multi-agent desk
-│   ├── war_room.py          # orchestrated debate
-│   ├── portfolio.py  stress.py  discover.py  brief.py
-│   ├── report.py  ecosystem.py  backtest.py  verdict_log.py
-│   ├── market.py  quant.py  screener.py  nse.py
-│   ├── guardrails.py  groq_pool.py  llm_cache.py
-│   ├── session_registry.py  auth.py  rate_limiter.py
-│   └── requirements.txt
-├── AGENTS.md                # rules for AI coding agents
-├── client/PAGES.md          # page specs
-├── .gitignore
+│   │   ├── agents/          # Individual research workspaces
+│   │   ├── shared/          # Shared UI and stream components
+│   │   └── ui/              # UI primitives
+│   └── lib/                 # API, auth, and SSE utilities
+├── server/
+│   └── main.py              # Current backend entry-point placeholder
+├── docs/
+│   ├── backend-design.md    # Backend architecture and API contract
+│   └── frontend-design.md   # Pages, routes, and client behaviour
+├── AGENTS.md                # Repository-level engineering guidance
+├── CLAUDE.md                # AI coding-agent guidance
 └── README.md
-```
-
-## Getting started
-
-### Prerequisites
-- Node.js 20+
+For the detailed implementation contracts, see:
+- [Backend design specification](docs/backend-design.md)
+- [Frontend design specification](docs/frontend-design.md)
+🚀 Run locally
+Prerequisites
+- Node.js and pnpm
 - Python 3.11+
-- A [Groq API key](https://console.groq.com) (free tier works)
-
-### 1. Clone
-```bash
-git clone <your-repo-url>
-cd <your-repo>
-```
-
-### 2. Server
-```bash
+- A Groq API key for model-backed workflows once the backend is implemented
+1. Clone the repository
+git clone https://github.com/Codenama-007/paypalai-hackathon.git
+cd paypalai-hackathon
+2. Start the frontend
+cd client
+pnpm install
+pnpm dev
+Open http://localhost:3000.
+3. Backend setup
+The backend specification targets FastAPI and Uvicorn. The currently tracked server/main.py is an empty placeholder, and the repository does not yet contain the complete backend implementation or dependency manifest. Once those files are added, the intended local workflow is:
 cd server
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+# macOS / Linux
+# source .venv/bin/activate
+
 pip install -r requirements.txt
-cp .env.example .env               # then add your keys
 uvicorn app_multi:app --reload --port 8000
-```
-Check it: <http://localhost:8000/api/health> should return `{"ok": true, ...}`.
+The API commands will not work until the backend modules and requirements.txt are committed.
+🔐 Environment configuration
+The backend design specification defines these variables:
+Variable	Required	Description
+GROQ_API_KEY	For LLM calls	Groq API key. Multiple keys may be comma-separated for failover.
+AUTH_SECRET	For auth	Long, random signing secret.
+CLIENT_ORIGIN	Production	Allowed frontend origin for CORS.
+SUPABASE_URL	Optional	Supabase project URL for persistent user storage.
+SUPABASE_SERVICE_KEY	Optional	Server-side service-role key. Never expose it to the browser.
+LANGCHAIN_TRACING_V2	Optional	Enables LangSmith tracing when configured.
+NEXT_PUBLIC_API_BASE	Frontend	FastAPI base URL, e.g. http://localhost:8000.
 
-### 3. Client
-```bash
-cd client
-npm install
-cp .env.example .env.local
-npm run dev
-```
-Open <http://localhost:3000>.
 
-## Environment variables
+Create local environment files from example templates when they are added. Never commit API keys, tokens, passwords, or populated environment files.
+⇄ API at a glance
+The backend specification defines the following endpoint groups. These are the target API contract, not a claim that every endpoint is currently available.
+Area	Endpoint(s)	Purpose
+Health	GET /api/health	Service health and model-key status
+Auth	POST /api/auth/signup, POST /api/auth/login	Account creation and sign-in
+User	GET /api/me, PUT /api/me/profile	Current user and risk profile
+Chat	GET /api/chat	Ticker-specific research chat
+Analyst	GET /api/task/start, GET /api/task/step	Start and resume task execution
+Research desk	GET /api/analyze, GET /api/resume	Multi-agent analysis and resume
+War Room	GET /api/war/start, GET /api/war/resume	Specialist debate and approval
+Portfolio	POST /api/portfolio, GET /api/portfolio/analyze	Load and analyse holdings
+Portfolio actions	GET /api/portfolio/resume, GET /api/portfolio/stress	Resume rebalance and run stress tests
+Discovery	GET /api/discover	Natural-language stock screening
+Brief	GET /api/brief	Market and watchlist briefing
+Company map	GET /api/ecosystem	Company relationship research
+Research report	GET /api/report	Orchestrated research report
+Backtesting	GET /api/backtest	Historical strategy analysis
+Tracking	GET /api/track-record, GET /api/ledger	Verdict tracking and paper ledger
+Documents	POST /api/upload, DELETE /api/upload	Attach or clear research documents
+Symbols	GET /api/symbols?q=	Ticker/company lookup
 
-**`server/.env`**
 
-| Variable | Required | Purpose |
-|---|---|---|
-| `GROQ_API_KEY` | Yes | Groq key(s). Comma-separate several for automatic failover. |
-| `AUTH_SECRET` | Yes | Long random string. Keeps sign-ins valid across restarts. |
-| `SUPABASE_URL` | No | Persist accounts across redeploys. |
-| `SUPABASE_SERVICE_KEY` | No | Service-role key (never the anon key). Falls back to a local `users.json`. |
-| `LANGCHAIN_TRACING_V2` | No | Set `true` for LangSmith tracing. |
+SSE event contract
+Each event is a JSON object with a type field, sent as an SSE data frame:
+data: {"type":"phase","text":"Gathering company fundamentals"}
 
-**`client/.env.local`**
+data: {"type":"approval_request","text":"Review the proposed next step"}
 
-| Variable | Purpose |
-|---|---|
-| `NEXT_PUBLIC_API_BASE` | FastAPI URL, e.g. `http://localhost:8000` |
+data: {"type":"done"}
+A stream should terminate with a done event. Errors should be represented as an error event rather than an unhandled stream failure.
+🛡 Safety and compliance design
+The backend specification defines a layered output pipeline:
+1. Deterministic neutralisation of prohibited or misleading phrases.
+2. Semantic compliance screening.
+3. Grounded rewriting that preserves facts and removes unsupported claims.
+4. Personally identifiable information (PII) scrubbing.
+5. A mandatory financial disclaimer.
+Additional controls include request validation, prompt-injection screening, rate limiting, bounded session state, server-side secret handling, and explicit labelling of sample data.
+FinIntel does not execute trades. Any research output is informational and must not be treated as personalised financial advice.
 
-Never commit `.env` files. Commit only `.env.example` files with placeholder values.
+🧪 Quality strategy
+The backend design calls for tests covering:
+- Input validation and prompt-injection cases.
+- Quantitative calculations and backtest maths.
+- Portfolio parsing and stress scenarios.
+- Agent stream contracts, including terminal done events.
+- Human approval pause/resume using the same thread identifier.
+- Authentication edge cases and expired sessions.
+- Mocked external data and model providers so unit tests do not depend on live services.
+As implementation lands, add the exact test commands and CI status here.
+🗺 Project status
+The repository currently contains the frontend scaffold and detailed product/engineering specifications. The backend design is documented, but the tracked backend entry point is still a placeholder. This section intentionally distinguishes the design from working functionality.
+- [x] Product concept and feature scope documented
+- [x] Frontend page and interaction specification
+- [x] Backend architecture and API contract specification
+- [ ] Implement backend API and agent modules
+- [ ] Implement authentication and persistence
+- [ ] Implement SSE streaming and LangGraph approval/resume
+- [ ] Complete frontend workspaces and shared components
+- [ ] Add automated tests and CI
+- [ ] Deploy the full application
+👥 Contributors
+Built collaboratively. See [contributors.md](contributors.md) for the current contributor list.
+📄 License
+No license file is currently present in this repository. Until a license is added, reuse and redistribution permissions are not explicitly granted. Add a LICENSE file before presenting the project as open source.
+<div align="center">FinIntel — research with AI, decisions with humans.
 
-## Pages and routes
-
-| Route | Page | Access |
-|---|---|---|
-| `/` | Landing page | Public |
-| `/login` | Sign in | Public only |
-| `/register` | Create account | Public only |
-| `/app` | Agent workspace (all tabs plus chat panel) | Signed-in only |
-
-Auth tokens live in an httpOnly cookie set by Next.js route handlers, never in localStorage. See `client/PAGES.md` for the full page specs.
-
-## API reference
-
-All agent endpoints are `GET` and stream SSE. Every request needs a UUID `thread`.
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /api/task/start`, `/api/task/step` | Analyst task agent (start, then approve/redirect/stop) |
-| `GET /api/chat` | ReAct chat (a `ticker` is required) |
-| `POST /api/upload`, `DELETE /api/upload` | Attach or clear a document for chat Q&A |
-| `GET /api/analyze`, `/api/resume` | Multi-agent desk with approval gate |
-| `GET /api/war/start`, `/api/war/resume` | War Room |
-| `POST /api/portfolio` | Load holdings (CSV file or pasted text) |
-| `GET /api/portfolio/analyze`, `/resume`, `/stress` | Audit, rebalance gate, stress test |
-| `GET /api/discover` | Natural-language screener |
-| `GET /api/brief` | Morning brief |
-| `GET /api/ecosystem` | Company ecosystem map |
-| `GET /api/report` | Full research report |
-| `GET /api/backtest` | Lumpsum / SIP backtest |
-| `GET /api/track-record`, `/api/ledger` | Verdict scoring and paper-trading ledger |
-| `GET /api/symbols?q=` | Ticker/company autocomplete |
-| `POST /api/auth/signup`, `/api/auth/login` | Accounts |
-| `GET /api/me`, `PUT /api/me/profile` | Current user and risk profile |
-| `GET /api/health` | Health check |
-
-### Event stream format
-```
-data: {"type": "propose", "tool": "valuation", "summary": "..."}
-
-data: {"type": "done"}
-```
-Common event types: `intro`, `step_result`, `chart`, `propose`, `approval_request`, `final`, `error`, `done`.
-
-### Approval flow
-1. Client starts a run with a new `thread` UUID.
-2. The stream ends at `propose` or `approval_request`.
-3. The user chooses Approve, Reject, or sends feedback.
-4. Client calls the resume endpoint with the **same** `thread` and a `decision`.
-5. The checkpointed graph resumes and streams the rest.
-
-## How the agents work
-
-- **Task agent** proposes one step at a time and waits for your decision.
-- **Chat agent** is a ReAct loop over 31 tools. It self-reviews its draft, then runs the compliance pipeline.
-- **Desk** runs researcher, risk check, synthesis and reflection, then pauses at a gate before finalising.
-- **War Room**: Chief Analyst plans, specialists (quant, fundamental, news, risk) run in parallel, Bull and Bear argue, and a Judge rules.
-- **Portfolio auditor** analyses holdings in parallel, flags portfolio-level risk, and proposes a rebalance behind a gate.
-
-## Compliance and safety
-
-Every LLM output goes through this pipeline:
-1. Forbidden-phrase neutralisation
-2. Semantic LLM screen
-3. Grounded rewrite (never invents facts; deletes what it can't fix)
-4. PII scrub
-5. Mandatory SEBI-style disclaimer
-
-Also in place: input validation, a prompt-injection screen, rate limiting, request IDs, and bounded per-thread session eviction. The Groq key stays server-side; the browser never calls Groq directly.
-
-## Development workflow
-
-- Build one page or feature at a time; commit after each working step.
-- Keep the API contract stable between `client/` and `server/`.
-- Add shadcn components with `npx shadcn@latest add <component>`.
-- Run `npm run lint` and `npm run build` before pushing.
-- If you use an AI coding agent, point it at `AGENTS.md` and `client/PAGES.md`.
-
-## Testing
-
-```bash
-# server
-cd server && pytest                 # mock yfinance and Groq
-
-# client
-cd client && npm run lint && npm run build
-```
-
-Minimum end-to-end checks:
-- Register, then land on `/app`
-- Run an agent, see it stream, pause at the gate, resume, and finish
-- Signed-out visit to `/app` redirects to `/login`
-- Chat is disabled until a ticker is chosen
-
-## Deployment
-
-| Piece | Suggested host | Notes |
-|---|---|---|
-| `client/` | Vercel | Set root directory to `client`; add `NEXT_PUBLIC_API_BASE` before the first build (it's baked in at build time). |
-| `server/` | Render, Railway or Fly.io | Needs one always-on Python process (in-memory approval state and SSE). Set the env vars above. |
-
-Notes:
-- Free tiers may sleep when idle, so the first request can take 30-60 seconds.
-- Run a single backend instance: approval state is held in memory and checkpoints are per-process.
-- Set `AUTH_SECRET` in production, or sign-ins reset on every restart.
-- Use Supabase for accounts in production; the local `users.json` is wiped on redeploy.
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| Stream drops immediately | Check the backend is running and `NEXT_PUBLIC_API_BASE` is correct. |
-| Chat returns 422 | A ticker must be selected first. |
-| "Sample data" badge everywhere | Live feeds (Yahoo, Screener, NSE) are unreachable; check your network. |
-| Agents error with a connection message | Check `GROQ_API_KEY` is set and valid (`/api/health` shows `has_key`). |
-| "Session expired" on resume | The server restarted or evicted the thread; start the run again. |
-| CORS errors | Allow your client origin in the FastAPI CORS config. |
-| Signed out after every restart | Set a fixed `AUTH_SECRET`. |
-
-## Roadmap
-
-- [ ] Landing, login and registration pages
-- [ ] Main workspace shell with tabs and chat panel
-- [ ] Shared SSE hook and approval gate component
-- [ ] All eight agent tabs
-- [ ] Risk profile dialog
-- [ ] Tests and CI
-- [ ] Production deployment
-
-## Credits and license
-
-- Agent backend and original concept: [vj0246/FinIntel](https://github.com/vj0246/FinIntel). Check that repo's licence terms before redistributing, since it didn't show a licence file when I looked.
-- Data from Yahoo Finance (via yfinance), Screener.in and NSE India, subject to their terms of use.
-
-Choose a licence for your own code (MIT is common) and add a `LICENSE` file.
+<sub>Built as a collaborative hackathon project.</sub>
+</div>

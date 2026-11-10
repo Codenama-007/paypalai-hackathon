@@ -1298,3 +1298,388 @@ svg.w-7, .w-7 { width: 28px !important; height: 28px !important; }
   flex-direction: column;
   gap: 14px;
 }
+
+/* =========================================================================
+   7. DYNAMIC STARTING DASHBOARD (EXACT SCREENSHOT FIDELITY)
+   ========================================================================= */
+
+.nvidia-dashboard-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #21242c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px 28px 12px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #FFFFFF;
+}
+
+.dynamic-stock-dashboard-root {
+  width: 100%;
+  max-width: 366px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Quick Switcher Ribbon */
+.stock-selector-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.stock-search-input-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: #2b2f38;
+  border: 1px solid #3e4350;
+  color: #979ca8;
+  font-size: 11px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.stock-search-input-pill:hover {
+  border-color: #60677a;
+  color: #ffffff;
+}
+
+.ticker-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 2px 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.ticker-chip {
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #979ca8;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.ticker-chip:hover {
+  color: #ffffff;
+  background-color: #2b2f38;
+}
+
+.ticker-chip.active {
+  background-color: #484e5b;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Stock Information Card */
+.nvidia-main-card {
+  background-color: #343841;
+  border-radius: 22px;
+  padding: 16px 14px 14px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Price Header */
+.nvidia-price-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.nvidia-price-val {
+  font-size: 29px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.nvidia-price-currency {
+  font-size: 12px;
+  font-weight: 500;
+  color: #979ca8;
+  text-transform: uppercase;
+}
+
+.nvidia-price-change {
+  font-size: 12.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 2px;
+}
+
+.nvidia-price-change.negative {
+  color: #ea7676;
+}
+
+.nvidia-price-change.positive {
+  color: #66c18c;
+}
+
+/* Market Sub-headers */
+.nvidia-sub-info-row {
+  font-size: 11px;
+  color: #979ca8;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nvidia-disclaimer-link {
+  color: #979ca8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.nvidia-disclaimer-link:hover {
+  color: #ffffff;
+}
+
+.nvidia-premarket-row {
+  font-size: 11px;
+  color: #979ca8;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Timeframe Bar */
+.nvidia-timeframe-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  user-select: none;
+}
+
+.nvidia-timeframe-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nvidia-timeframe-btn {
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  color: #979ca8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nvidia-timeframe-btn:hover {
+  color: #ffffff;
+}
+
+.nvidia-timeframe-btn.active {
+  background-color: #484e5b;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Stock Chart Container */
+.nvidia-chart-container {
+  position: relative;
+  width: 100%;
+  height: 125px;
+  user-select: none;
+}
+
+.nvidia-chart-xaxis {
+  display: flex;
+  justify-content: space-around;
+  font-size: 9.5px;
+  color: #979ca8;
+  padding-left: 32px;
+  padding-right: 16px;
+  margin-top: -2px;
+}
+
+/* Divider */
+.nvidia-card-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+  margin: 10px 0 12px 0;
+}
+
+/* Statistics 2-Column Grid */
+.nvidia-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+  row-gap: 6px;
+  font-size: 11.5px;
+  padding: 2px 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.nvidia-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nvidia-stat-label {
+  color: #979ca8;
+}
+
+.nvidia-stat-val {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Bottom Sub-Cards */
+.nvidia-subcards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nvidia-sub-card {
+  background-color: #282b32;
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.nvidia-sub-card:hover {
+  border-color: #4b5263;
+  transform: translateY(-1px);
+}
+
+.nvidia-subcard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.nvidia-subcard-body {
+  margin-top: 4px;
+}
+
+.nvidia-subcard-mainval {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.nvidia-subcard-subval {
+  font-size: 10.5px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.nvidia-subcard-subval.positive {
+  color: #66c18c;
+}
+
+.nvidia-subcard-subval.negative {
+  color: #ea7676;
+}
+
+.nvidia-subcard-label {
+  font-size: 10px;
+  color: #979ca8;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Action Button */
+.nvidia-analyse-btn {
+  width: 100%;
+  height: 42px;
+  border-radius: 9999px;
+  background-color: #252831;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+.nvidia-analyse-btn:hover {
+  background-color: #323643;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nvidia-analyse-btn:active {
+  transform: scale(0.99);
+}
+
+/* Hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

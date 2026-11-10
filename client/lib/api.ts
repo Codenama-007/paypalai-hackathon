@@ -34,9 +34,10 @@ export async function loginUser(email: string, password: string) {
     }
 
     return await res.json();
-  } catch (err: any) {
+  } catch (err: unknown) {
     // If backend endpoint is not currently running or reachable, we fallback to graceful validation/simulation
-    if (err.message.includes("Failed to fetch") || err.name === "TypeError") {
+    const e = err as Error;
+    if (e.message?.includes("Failed to fetch") || e.name === "TypeError") {
       // Local fallback simulation for smooth UI experience
       await new Promise((r) => setTimeout(r, 600));
       return {
@@ -65,8 +66,9 @@ export async function registerUser(name: string, email: string, password: string
     }
 
     return await res.json();
-  } catch (err: any) {
-    if (err.message.includes("Failed to fetch") || err.name === "TypeError") {
+  } catch (err: unknown) {
+    const e = err as Error;
+    if (e.message?.includes("Failed to fetch") || e.name === "TypeError") {
       await new Promise((r) => setTimeout(r, 600));
       return {
         access_token: "mock-jwt-token-" + Date.now(),

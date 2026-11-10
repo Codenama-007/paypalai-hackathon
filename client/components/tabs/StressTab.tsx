@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Sliders } from "lucide-react";
@@ -18,8 +19,6 @@ interface StressTabProps {
 }
 
 export default function StressTab({
-  stressScenario,
-  setStressScenario,
   marketShock,
   setMarketShock,
   crudeShock,

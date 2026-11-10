@@ -10,15 +10,12 @@ import { ShieldCheck, Activity, CheckCircle, Database } from "lucide-react";
 
 export default function AppPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user] = useState<User | null>(() => getStoredUser());
+  const [loading] = useState(() => (typeof window !== "undefined" ? !isAuthenticated() : false));
 
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/login");
-    } else {
-      setUser(getStoredUser());
-      setLoading(false);
     }
   }, [router]);
 

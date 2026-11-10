@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { clearAuth } from "@/lib/auth";
 

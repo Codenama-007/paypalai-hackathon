@@ -9,6 +9,7 @@ interface BacktestTabProps {
   setBacktestAmount: (v: number) => void;
   backtestYears: number;
   setBacktestYears: (v: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   backtestData: any | null;
   runBacktest: () => Promise<void>;
 }
@@ -110,7 +111,7 @@ export default function BacktestTab({
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
-                {backtestData.timeline?.map((row: any, i: number) => (
+                {backtestData.timeline?.map((row: { month: number; invested: number; portfolio_value: number; nifty_value: number; alpha: number }, i: number) => (
                   <tr key={i} className="hover:bg-zinc-800/50">
                     <td className="p-3">Month {row.month}</td>
                     <td className="p-3">₹{row.invested.toLocaleString()}</td>

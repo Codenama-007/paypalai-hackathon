@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./finintel.css";
 
 export const metadata: Metadata = {
   title: "FinIntel — Agentic Equity Research Desk (NSE)",
@@ -13,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark h-full antialiased">
-      <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#080D12] text-[#E7E9EC]">{children}</body>
     </html>
   );
 }

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinAnalyst AI — Institutional Equity Research Desk</title>
+  <link rel="stylesheet" href="/finintel.css">
+  <style>
+    /* Inline SVG utility sizing */
+    .icon { width: 14px; height: 14px; display: inline-block; vertical-align: middle; }
+    .icon-sm { width: 11px; height: 11px; }
+    .icon-lg { width: 18px; height: 18px; }
+  </style>
+</head>
+<body class="fin-dashboard">
+  <!-- =========================================================================
+       1. TOP NAVIGATION BAR
+       ========================================================================= -->
+  <header class="fin-top-nav">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <!-- Logo & Tagline -->
+      <div class="fin-logo-group">
+        <div class="fin-logo-icon">
+          <svg viewBox="0 0 24 24" class="icon-lg" fill="none">
+            <path d="M4 19L11 4L13.5 9.5L8.5 19H4Z" fill="#D6B75E" />
+            <path d="M14.5 11.5L18 19H13L11.5 15.5L14.5 11.5Z" fill="#F3DE97" />
+            <path d="M13 15H17" stroke="#080D12" stroke-width="1.2" />
+          </svg>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <span class="fin-brand-text">FinAnalyst AI</span>
+          <span class="fin-brand-tagline">Research · Analyse · Invest</span>
+        </div>
+      </div>
+
+      <!-- NSE: NIFTY 50 Ticker Pill -->
+      <div class="fin-ticker-pill">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <span style="font-weight: 600; color: #E7E9EC;">NSE: NIFTY 50</span>
+        <span style="font-weight: 700; color: #E7E9EC;">24,142.30</span>
+        <span style="color: #35C98A; font-weight: 600;">▲ +0.40% (+96.80)</span>
+      </div>
+
+      <!-- Risk Profile Pill -->
+      <div class="fin-risk-pill">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2">
+          <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM7 21h10M12 3v18"></path>
+        </svg>
+        <span style="color: #929CA7;">Risk Profile:</span>
+        <span style="font-weight: 600; color: #D6B75E;">Balanced</span>
+        <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Right Utility Controls -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <!-- Search Button -->
+      <button class="fin-icon-btn" title="Search">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+
+      <!-- Bell Button with Dot -->
+      <button class="fin-icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span style="position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background-color: #D6B75E;"></span>
+      </button>
+
+      <!-- Theme Button -->
+      <button class="fin-icon-btn" title="Toggle Theme">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+      <!-- User Profile Pill -->
+      <div class="fin-user-pill">
+        <div class="fin-avatar-circle">RD</div>
+        <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#929CA7" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       2. THREE-COLUMN DESK LAYOUT
+       ========================================================================= -->
+  <div class="fin-dashboard-desk">
+    <!-- LEFT SIDEBAR -->
+    <aside class="fin-sidebar">
+      <div class="fin-nav-list">
+        <button class="fin-nav-btn active">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Analyst
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="22" y1="12" x2="18" y2="12"></line>
+              <line x1="6" y1="12" x2="2" y2="12"></line>
+              <line x1="12" y1="6" x2="12" y2="2"></line>
+              <line x1="12" y1="22" x2="12" y2="18"></line>
+            </svg>
+            War Room
+          </span>
+          <span class="fin-nav-badge-live">Live</span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+            Portfolio
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+            Discover
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Brief
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            Ecosystem
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+            </svg>
+            Report
+          </span>
+        </button>
+
+        <button class="fin-nav-btn">
+          <span style="display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path>
+              <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
+            </svg>
+            Backtest
+          </span>
+        </button>
+      </div>
+
+      <!-- Bottom Wireframe Mesh & Quote -->
+      <div class="fin-sidebar-footer">
+        <div class="fin-contour-container">
+          <svg viewBox="0 0 160 75" style="width: 100%; height: 100%;" fill="none">
+            <path d="M0 62 Q 25 42, 55 50 T 100 18 T 135 35 T 160 25" stroke="#D6B75E" stroke-width="1.2" opacity="0.9"/>
+            <path d="M0 66 Q 20 48, 50 56 T 95 28 T 130 44 T 160 34" stroke="#C5A44E" stroke-width="1" opacity="0.65"/>
+            <path d="M0 70 Q 30 58, 60 64 T 105 40 T 140 54 T 160 46" stroke="#A98B45" stroke-width="0.8" opacity="0.45"/>
+            <path d="M0 74 Q 35 66, 70 70 T 115 52 T 150 64 T 160 58" stroke="#7A632E" stroke-width="0.6" opacity="0.3"/>
+            <line x1="15" y1="35" x2="9" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="35" y1="42" x2="29" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="55" y1="48" x2="49" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="75" y1="36" x2="69" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="95" y1="22" x2="89" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="115" y1="28" x2="109" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="135" y1="38" x2="129" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+            <line x1="155" y1="30" x2="149" y2="72" stroke="#D6B75E" stroke-width="0.4" opacity="0.25"/>
+          </svg>
+        </div>
+        <div class="fin-sidebar-quote">
+          <p>&ldquo;Data for insight,</p>
+          <p>AI for depth,</p>
+          <p>You for the decision.&rdquo;</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER MAIN ANALYST WORKSPACE -->
+    <main class="fin-workspace">
+      <!-- Title & 4-Way View Switcher -->
+      <div class="fin-workspace-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" class="icon-lg" fill="none" stroke="#D6B75E" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <div>
+            <h1 style="font-size: 16px; font-weight: 700; color: #E7E9EC; margin: 0; line-height: 1.15;">Analyst</h1>
+            <p style="font-size: 10px; color: #929CA7; margin: 0;">AI-powered equity research, deep analysis, and actionable insights.</p>
+          </div>
+        </div>
+
+        <div class="fin-switcher-pill">
+          <button class="fin-switcher-btn active">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Single Stock
+          </button>
+          <button class="fin-switcher-btn">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Sector
+          </button>
+          <button class="fin-switcher-btn">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
+            Compare
+          </button>
+          <button class="fin-switcher-btn">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            Screener
+          </button>
+        </div>
+      </div>
+
+      <!-- Stock Overview Header Card -->
+      <div class="fin-stock-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- Search Pill -->
+            <div style="height: 30px; width: 170px; border-radius: 6px; background-color: #0B1219; border: 1px solid #26333D; padding: 0 10px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#929CA7" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span style="font-weight: 600; font-size: 11px; color: #E7E9EC;">RELIANCE</span>
+              </div>
+              <span style="color: #929CA7; font-size: 12px; cursor: pointer;">✕</span>
+            </div>
+
+            <!-- Logo R -->
+            <div class="fin-stock-badge-r">R</div>
+
+            <!-- Title & Live Pill -->
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: 700; font-size: 12px; color: #E7E9EC;">RELIANCE INDUSTRIES LTD.</span>
+                <span class="fin-live-badge">
+                  <span class="fin-pulse-dot" style="width: 4px; height: 4px; border-radius: 50%; background-color: #26C88A; display: inline-block;"></span>
+                  Live
+                </span>
+              </div>
+              <span style="font-size: 10px; font-family: var(--fin-font-mono); color: #929CA7;">RELIANCE · NSE</span>
+            </div>
+          </div>
+
+          <!-- Price & Options -->
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="text-align: right;">
+              <div style="font-size: 16px; font-weight: 700; font-family: var(--fin-font-mono); color: #E7E9EC; line-height: 1.15;">₹2,987.40</div>
+              <div style="font-size: 10px; font-family: var(--fin-font-mono); font-weight: 600; color: #35C98A;">▲ +12.30 (+0.41%)</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px; padding-left: 8px; border-left: 1px solid #26333D;">
+              <button class="fin-icon-btn" style="color: #D6B75E;"><svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>
+              <button class="fin-icon-btn"><svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Research Tabs -->
+        <div class="fin-tabs-row">
+          <button class="fin-tab-btn active">Overview</button>
+          <button class="fin-tab-btn">Financials</button>
+          <button class="fin-tab-btn">Valuation</button>
+          <button class="fin-tab-btn">Ownership</button>
+          <button class="fin-tab-btn">News & Events</button>
+          <button class="fin-tab-btn">Sentiment</button>
+          <button class="fin-tab-btn">AI Thesis</button>
+        </div>
+      </div>
+
+      <!-- Candlestick Chart & Key Metrics -->
+      <div class="fin-chart-metrics-row">
+        <!-- Candlestick Chart Box (8 cols) -->
+        <div class="fin-panel-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #26333D; padding-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <button class="fin-timeframe-btn active">1D</button>
+              <button class="fin-timeframe-btn">5D</button>
+              <button class="fin-timeframe-btn">1M</button>
+              <button class="fin-timeframe-btn">6M</button>
+              <button class="fin-timeframe-btn">1Y</button>
+              <button class="fin-timeframe-btn">5Y</button>
+              <button class="fin-timeframe-btn">Max</button>
+              <span style="color: #929CA7; font-size: 10px; margin-left: 4px; font-family: monospace;">⫽</span>
+            </div>
+            <button style="background: transparent; border: none; color: #929CA7; cursor: pointer;">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+            </button>
+          </div>
+
+          <!-- SVG Candlestick Graphic Matching Reference -->
+          <div style="flex: 1; width: 100%; position: relative; padding-top: 4px;">
+            <svg viewBox="0 0 520 170" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+              <line x1="0" y1="20" x2="465" y2="20" stroke="#1C2731" stroke-width="0.7" stroke-dasharray="2 2" />
+              <line x1="0" y1="52" x2="465" y2="52" stroke="#1C2731" stroke-width="0.7" stroke-dasharray="2 2" />
+              <line x1="0" y1="85" x2="465" y2="85" stroke="#1C2731" stroke-width="0.7" stroke-dasharray="2 2" />
+              <line x1="0" y1="118" x2="465" y2="118" stroke="#1C2731" stroke-width="0.7" stroke-dasharray="2 2" />
+              <line x1="0" y1="145" x2="465" y2="145" stroke="#1C2731" stroke-width="0.7" stroke-dasharray="2 2" />
+
+              <text x="472" y="24" fill="#929CA7" font-size="8" font-family="monospace">3,020.00</text>
+              <text x="472" y="55" fill="#929CA7" font-size="8" font-family="monospace">3,000.00</text>
+              <rect x="468" y="68" width="48" height="13" rx="2" fill="#26C88A" />
+              <text x="471" y="78" fill="#080D12" font-size="7.5" font-weight="bold" font-family="monospace">2,987.40</text>
+              <text x="472" y="95" fill="#929CA7" font-size="8" font-family="monospace">2,980.00</text>
+              <text x="472" y="122" fill="#929CA7" font-size="8" font-family="monospace">2,960.00</text>
+              <text x="472" y="147" fill="#929CA7" font-size="8" font-family="monospace">2,940.00</text>
+
+              <!-- Dynamic Candles -->
+              <g stroke="#35C98A" fill="#35C98A">
+                <line x1="22" y1="122" x2="22" y2="133" stroke-width="1" />
+                <rect x="20" y="125" width="4.5" height="5" />
+                <line x1="42" y1="115" x2="42" y2="124" stroke="#E36B73" stroke-width="1" />
+                <rect x="40" y="118" width="4.5" height="3" fill="#E36B73" stroke="#E36B73" />
+                <line x1="62" y1="102" x2="62" y2="114" stroke-width="1" />
+                <rect x="60" y="105" width="4.5" height="7" />
+                <line x1="82" y1="86" x2="82" y2="100" stroke-width="1" />
+                <rect x="80" y="90" width="4.5" height="7" />
+                <line x1="102" y1="82" x2="102" y2="94" stroke-width="1" />
+                <rect x="100" y="86" width="4.5" height="7" />
+                <line x1="122" y1="88" x2="122" y2="98" stroke="#E36B73" stroke-width="1" />
+                <rect x="120" y="90" width="4.5" height="6" fill="#E36B73" stroke="#E36B73" />
+                <line x1="142" y1="100" x2="142" y2="112" stroke="#E36B73" stroke-width="1" />
+                <rect x="140" y="102" width="4.5" height="7" fill="#E36B73" stroke="#E36B73" />
+                <line x1="162" y1="109" x2="162" y2="119" stroke-width="1" />
+                <rect x="160" y="111" width="4.5" height="4" />
+                <line x1="182" y1="117" x2="182" y2="127" stroke="#E36B73" stroke-width="1" />
+                <rect x="180" y="119" width="4.5" height="6" fill="#E36B73" stroke="#E36B73" />
+                <line x1="202" y1="120" x2="202" y2="131" stroke="#E36B73" stroke-width="1" />
+                <rect x="200" y="122" width="4.5" height="5" fill="#E36B73" stroke="#E36B73" />
+                <line x1="222" y1="123" x2="222" y2="132" stroke="#E36B73" stroke-width="1" />
+                <rect x="220" y="125" width="4.5" height="4" fill="#E36B73" stroke="#E36B73" />
+                <line x1="242" y1="120" x2="242" y2="128" stroke="#E36B73" stroke-width="1" />
+                <rect x="240" y="123" width="4.5" height="3" fill="#E36B73" stroke="#E36B73" />
+                <line x1="262" y1="112" x2="262" y2="124" stroke-width="1" />
+                <rect x="260" y="115" width="4.5" height="7" />
+                <line x1="282" y1="99" x2="282" y2="111" stroke-width="1" />
+                <rect x="280" y="102" width="4.5" height="7" />
+                <line x1="302" y1="93" x2="302" y2="102" stroke="#E36B73" stroke-width="1" />
+                <rect x="300" y="95" width="4.5" height="4" fill="#E36B73" stroke="#E36B73" />
+                <line x1="322" y1="82" x2="322" y2="93" stroke-width="1" />
+                <rect x="320" y="85" width="4.5" height="6" />
+                <line x1="342" y1="77" x2="342" y2="85" stroke="#E36B73" stroke-width="1" />
+                <rect x="340" y="79" width="4.5" height="3" fill="#E36B73" stroke="#E36B73" />
+                <line x1="362" y1="69" x2="362" y2="79" stroke-width="1" />
+                <rect x="360" y="73" width="4.5" height="4" />
+                <line x1="382" y1="72" x2="382" y2="82" stroke-width="1" />
+                <rect x="380" y="75" width="4.5" height="4" />
+                <line x1="402" y1="70" x2="402" y2="79" stroke="#E36B73" stroke-width="1" />
+                <rect x="400" y="72" width="4.5" height="5" fill="#E36B73" stroke="#E36B73" />
+                <line x1="422" y1="70" x2="422" y2="77" stroke="#E36B73" stroke-width="1" />
+                <rect x="420" y="73" width="4.5" height="1" fill="#E36B73" stroke="#E36B73" />
+                <line x1="442" y1="70" x2="442" y2="75" stroke="#E36B73" stroke-width="1" />
+                <rect x="440" y="72" width="4.5" height="1" fill="#E36B73" stroke="#E36B73" />
+              </g>
+            </svg>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace; color: #929CA7; padding-top: 2px; border-top: 1px solid #26333D;">
+            <span>09:15</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span>
+          </div>
+        </div>
+
+        <!-- Key Metrics (4 cols) -->
+        <div class="fin-panel-box">
+          <div style="display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #26333D; padding-bottom: 4px;">
+            <button class="fin-timeframe-btn active">Key Metrics</button>
+            <button class="fin-timeframe-btn">About</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px; padding: 4px 0;">
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">Market Cap</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">₹20.24 L Cr</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">P/E (TTM)</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">26.4</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">EPS (TTM)</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">₹113.2</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">Dividend Yield</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">0.34%</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">52W High</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">₹3,024.90</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #929CA7;">52W Low</span><span style="font-family: monospace; font-weight: 600; color: #E7E9EC;">₹2,222.00</span></div>
+          </div>
+
+          <div style="height: 1px;"></div>
+        </div>
+      </div>
+
+      <!-- Analysis Stream & Insight Summary -->
+      <div class="fin-stream-summary-row">
+        <!-- Stream (7 cols) -->
+        <div class="fin-stream-box">
+          <span style="font-size: 11px; font-weight: 700; color: #E7E9EC; text-transform: uppercase; letter-spacing: 0.05em;">Analysis Stream</span>
+          <div style="position: relative; padding-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="fin-timeline-connector"></div>
+
+            <div style="position: relative;">
+              <span class="fin-timeline-node"></span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 9.5px; font-family: monospace; color: #929CA7;">10:02 AM</span>
+                <span style="font-size: 10.5px; font-weight: 700; color: #E7E9EC;">News Ingested</span>
+                <span style="font-size: 8.5px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background-color: #152E22; color: #26C88A;">News</span>
+              </div>
+              <p style="font-size: 9.5px; color: #929CA7; margin: 2px 0 0 58px;">Reliance to expand clean energy capacity by 10 GW by FY28.</p>
+            </div>
+
+            <div style="position: relative;">
+              <span class="fin-timeline-node"></span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 9.5px; font-family: monospace; color: #929CA7;">10:05 AM</span>
+                <span style="font-size: 10.5px; font-weight: 700; color: #E7E9EC;">Fundamental Scan Completed</span>
+                <span style="font-size: 8.5px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background-color: #2A2312; color: #D6B75E;">Analysis</span>
+              </div>
+              <p style="font-size: 9.5px; color: #929CA7; margin: 2px 0 0 58px;">Revenue outlook upgraded; margin stability intact.</p>
+            </div>
+
+            <div style="position: relative;">
+              <span class="fin-timeline-node"></span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 9.5px; font-family: monospace; color: #929CA7;">10:08 AM</span>
+                <span style="font-size: 10.5px; font-weight: 700; color: #E7E9EC;">Sentiment Update</span>
+                <span style="font-size: 8.5px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background-color: #322510; color: #E5A93C;">Sentiment</span>
+              </div>
+              <p style="font-size: 9.5px; color: #929CA7; margin: 2px 0 0 58px;">Overall sentiment: Positive (78% bullish) across news & social sources.</p>
+            </div>
+
+            <div style="position: relative;">
+              <span class="fin-timeline-node"></span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 9.5px; font-family: monospace; color: #929CA7;">10:12 AM</span>
+                <span style="font-size: 10.5px; font-weight: 700; color: #E7E9EC;">AI Insight Generated</span>
+                <span style="font-size: 8.5px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background-color: #25182B; color: #C084FC;">AI</span>
+              </div>
+              <p style="font-size: 9.5px; color: #929CA7; margin: 2px 0 0 58px;">Long-term outlook remains constructive on energy & retail expansion.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary (5 cols) -->
+        <div class="fin-panel-box" style="justify-content: flex-start; gap: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #26333D; padding-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+              <span style="font-size: 11px; font-weight: 700; color: #E7E9EC; text-transform: uppercase;">Insight Summary</span>
+            </div>
+            <span style="font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; background-color: #231A2D; color: #C084FC; border: 1px solid #402B56;">AI Analyst</span>
+          </div>
+
+          <p style="font-size: 10.5px; color: #E7E9EC; line-height: 1.6; margin: 4px 0 0 0;">
+            RELIANCE shows short-term strength with a +0.41% intraday gain, supported by positive news flow and stable fundamentals. Long-term outlook remains favorable on the back of energy transition and retail growth.
+          </p>
+        </div>
+      </div>
+
+      <!-- Approval Gate -->
+      <div class="fin-approval-gate">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 28px; height: 28px; border-radius: 6px; background-color: #1B1811; border: 1px solid #D6B75E; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div>
+            <span style="font-size: 11.5px; font-weight: 700; color: #E7E9EC;">Approval Gate</span>
+            <p style="font-size: 9.5px; color: #929CA7; margin: 0;">Review the analysis and choose the next action.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="fin-gate-approve-btn">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Approve
+          </button>
+          <button class="fin-gate-redirect-btn">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+            Redirect
+          </button>
+          <button class="fin-gate-stop-btn">
+            <span style="width: 8px; height: 8px; background-color: #E36B73; display: inline-block;"></span>
+            Stop
+          </button>
+        </div>
+      </div>
+
+      <!-- SEBI Mandatory Disclaimer -->
+      <div class="fin-disclaimer-card">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#929CA7" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <p style="font-size: 9px; color: #929CA7; line-height: 1.5; margin: 0;">
+          <strong style="color: #E7E9EC;">SEBI Mandatory Disclaimer:</strong> The analysis, insights, and information provided by FinAnalyst AI are for educational and research purposes only and do not constitute investment advice, buy/sell recommendations, or an offer to trade. Investments in the securities market are subject to market risks. Please read all related documents carefully before investing. FinAnalyst AI is not a SEBI-registered investment adviser or research analyst.
+        </p>
+      </div>
+    </main>
+
+    <!-- RIGHT AI CO-PILOT PANEL -->
+    <aside class="fin-copilot">
+      <!-- Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #26333D; padding-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          <div>
+            <h3 style="font-size: 11.5px; font-weight: 700; color: #E7E9EC; margin: 0; line-height: 1.15;">AI Co-Pilot</h3>
+            <p style="font-size: 8.5px; color: #929CA7; margin: 0;">Your financial research companion</p>
+          </div>
+        </div>
+        <button style="width: 20px; height: 20px; border-radius: 4px; background-color: #101A23; border: 1px solid #26333D; color: #929CA7; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Ticker Context -->
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 9.5px; color: #929CA7; font-weight: 500;">Ticker Context</span>
+        <div style="height: 30px; padding: 0 8px; border-radius: 5px; background-color: #101A23; border: 1px solid #26333D; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 16px; height: 16px; border-radius: 50%; background-color: #D6B75E; display: flex; align-items: center; justify-content: center; font-size: 8.5px; font-weight: 700; color: #080D12;">R</span>
+            <span style="font-size: 10.5px; font-family: monospace; font-weight: 700; color: #E7E9EC;">RELIANCE</span>
+          </div>
+          <span style="color: #929CA7; font-size: 11px; cursor: pointer;">✕</span>
+        </div>
+      </div>
+
+      <!-- ReAct Loop & 6 Research Tools Grid -->
+      <div style="border-radius: 6px; background-color: #101A23; border: 1px solid #26333D; padding: 8px; display: flex; flex-direction: column; gap: 6px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 600; color: #E7E9EC;">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+            <span>ReAct Loop</span>
+            <span style="color: #929CA7; font-size: 8.5px; font-weight: 400;">(Reason → Act → Observe)</span>
+          </div>
+          <span style="font-size: 8.5px; color: #929CA7; padding-left: 16px; display: block;">31 Tools Available</span>
+        </div>
+
+        <div class="fin-tools-grid">
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+            <span>Company Data</span>
+          </button>
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>Financials</span>
+          </button>
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path></svg>
+            <span>News & Events</span>
+          </button>
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM7 21h10M12 3v18"></path></svg>
+            <span>Valuation</span>
+          </button>
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            <span>Technical</span>
+          </button>
+          <button class="fin-tool-card">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span>Sentiment</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload PDF Box -->
+      <div class="fin-pdf-dropzone">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <span style="font-size: 10.5px; font-weight: 700; color: #E7E9EC;">Upload PDF</span>
+        <p style="font-size: 8.5px; color: #929CA7; margin: 0;">Earnings, Reports, Presentations, Research, etc.</p>
+      </div>
+
+      <!-- Suggested Prompts -->
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="display: flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 700; color: #E7E9EC;">
+          <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Suggested Prompts</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <button class="fin-prompt-pill">
+            <span>Summarize the latest results</span>
+            <span style="color: #929CA7;">›</span>
+          </button>
+          <button class="fin-prompt-pill">
+            <span>Analyze valuation vs. peers</span>
+            <span style="color: #929CA7;">›</span>
+          </button>
+          <button class="fin-prompt-pill">
+            <span>List key risks and catalysts</span>
+            <span style="color: #929CA7;">›</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div style="padding-top: 4px;">
+        <div class="fin-chat-bar">
+          <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+            <svg viewBox="0 0 24 24" class="icon-sm" fill="none" stroke="#D6B75E" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <input type="text" placeholder="Ask FinAnalyst..." class="fin-chat-input">
+          </div>
+          <button style="background: transparent; border: none; color: #D6B75E; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
+

@@ -18,22 +18,17 @@ import { ChatDesk } from "@/components/chat/ChatDesk";
 import { RedirectModal } from "@/components/shared/RedirectModal";
 import { ChatDialogueModal } from "@/components/chat/ChatDialogueModal";
 import { StockSearchModal } from "@/components/layout/StockSearchModal";
-import { NvidiaStockCard } from "@/components/nvidia/NvidiaStockCard";
-import { ChevronRight, ArrowLeft } from "lucide-react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
 
 function FinIntelContent() {
   const searchParams = useSearchParams();
-  const initialTicker = searchParams.get("ticker")?.toUpperCase() || "NVDA";
-  const initialMode = (searchParams.get("mode") as "starting" | "desk") || "starting";
-
-  // Mode: "starting" for dynamic reference screenshot dashboard, "desk" for deep analysis terminal
-  const [viewMode, setViewMode] = useState<"starting" | "desk">(initialMode);
+  const initialTicker = searchParams.get("ticker")?.toUpperCase() || "RELIANCE";
+  const initialNav = searchParams.get("nav")?.toLowerCase() || "analyst";
 
   // Dynamic Stock & Navigation States
   const [activeTicker, setActiveTicker] = useState<string>(initialTicker);
-  const [activeNav, setActiveNav] = useState("analyst");
+  const [activeNav, setActiveNav] = useState(initialNav);
   const [activeSegment, setActiveSegment] = useState<SegmentMode>("single");
   const [activeTab, setActiveTab] = useState<ResearchTab>("overview");
   const [activeMetricsTab, setActiveMetricsTab] = useState<MetricsTab>("metrics");
@@ -127,113 +122,9 @@ function FinIntelContent() {
     }, 600);
   };
 
-  // 1. PRIMARY STARTING DASHBOARD VIEW (Dynamic 1:1 Reference Screenshot Replication)
-  if (viewMode === "starting") {
-    return (
-      <main className="nvidia-dashboard-wrapper">
-        {/* Top Control Bar for rapid switching and reviewer convenience */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "356px",
-            padding: "4px 2px",
-            marginBottom: "6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            boxSizing: "border-box"
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#66C18C" }} />
-            <span style={{ fontSize: "11px", fontWeight: 700, color: "#CBD3DF", letterSpacing: "0.05em" }}>
-              FININTEL STARTING DASHBOARD
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setViewMode("desk")}
-            style={{
-              backgroundColor: "transparent",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: "14px",
-              padding: "4px 10px",
-              fontSize: "11px",
-              color: "#979CA8",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              transition: "all 0.15s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#FFFFFF";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#979CA8";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.12)";
-            }}
-          >
-            <span>Institutional Desk</span>
-            <ChevronRight style={{ width: 12, height: 12 }} />
-          </button>
-        </div>
-
-        {/* Dynamic Multi-Stock Reusable Dashboard Component */}
-        <NvidiaStockCard
-          ticker={activeTicker}
-          onSelectStock={(newTicker) => setActiveTicker(newTicker)}
-          onAnalyse={(selectedTicker) => {
-            setActiveTicker(selectedTicker);
-            setViewMode("desk");
-          }}
-          onSwitchToDesk={() => setViewMode("desk")}
-        />
-      </main>
-    );
-  }
-
-  // 2. FULL INSTITUTIONAL MULTI-AGENT RESEARCH DESK VIEW
+  // FULL INSTITUTIONAL MULTI-AGENT RESEARCH DESK VIEW
   return (
     <div className="fin-dashboard h-screen max-h-screen overflow-hidden bg-[#080D12] text-[#E7E9EC] flex flex-col font-sans select-none selection:bg-[#D6B75E] selection:text-[#080D12] relative">
-      {/* Quick Return to Starting Dashboard Floating Pill */}
-      <button
-        type="button"
-        onClick={() => setViewMode("starting")}
-        style={{
-          position: "fixed",
-          bottom: "16px",
-          right: "16px",
-          zIndex: 90,
-          backgroundColor: "#343841",
-          border: "1px solid rgba(255, 255, 255, 0.15)",
-          color: "#FFFFFF",
-          padding: "8px 14px",
-          borderRadius: "9999px",
-          fontSize: "12px",
-          fontWeight: 600,
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          cursor: "pointer",
-          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5)",
-          transition: "all 0.15s ease"
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#424754";
-          e.currentTarget.style.transform = "translateY(-1px)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#343841";
-          e.currentTarget.style.transform = "translateY(0)";
-        }}
-      >
-        <ArrowLeft style={{ width: 14, height: 14 }} />
-        <span>Return to Starting Card</span>
-      </button>
-
       {/* 1. TOP NAVIGATION BAR */}
       <Header
         riskProfile={riskProfile}
@@ -323,7 +214,7 @@ function FinIntelContent() {
 
 export default function FinIntelApp() {
   return (
-    <Suspense fallback={<div className="nvidia-dashboard-wrapper" />}>
+    <Suspense fallback={<div className="h-screen w-screen bg-[#080D12]" />}>
       <FinIntelContent />
     </Suspense>
   );

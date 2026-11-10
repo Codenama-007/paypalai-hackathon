@@ -3,8 +3,8 @@ import "./globals.css";
 import "./finintel.css";
 
 export const metadata: Metadata = {
-  title: "FinIntel — Dynamic Stock Analysis & Institutional Desk",
-  description: "AI Equity Research Desk with Dynamic Multi-Stock Analysis",
+  title: "FinIntel — Institutional Equity Research Desk",
+  description: "AI Equity Research Desk with Deep Analysis and Actionable Insights",
 };
 
 export const viewport: Viewport = {
@@ -24,7 +24,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#21242c] text-[#E7E9EC] m-0 p-0 overflow-x-hidden">
+      <body className="min-h-full flex flex-col bg-[#080D12] text-[#E7E9EC] m-0 p-0 overflow-x-hidden">
         {children}
       </body>
     </html>

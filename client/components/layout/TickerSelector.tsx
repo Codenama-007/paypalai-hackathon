@@ -82,18 +82,7 @@ export const TickerSelector: React.FC<TickerSelectorProps> = ({
         {/* Search Box Pill */}
         <div
           onClick={onOpenSearch}
-          className="h-[30px] w-[170px] rounded-[6px] bg-[#0B1219] border border-[#26333D] px-2.5 flex items-center justify-between text-xs cursor-pointer hover:border-[#D6B75E]/60 transition-colors"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: 30,
-            width: 170,
-            backgroundColor: "#0B1219",
-            border: "1px solid #26333D",
-            padding: "0 10px",
-            borderRadius: 6
-          }}
+          className="fin-stock-search-pill"
           title="Click to search other stocks"
         >
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

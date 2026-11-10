@@ -1,7 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { BarChart2, BarChart3, Sliders, Compass, X } from "lucide-react";
+import {
+  BarChart2,
+  BarChart3,
+  Sliders,
+  Compass,
+  X,
+  Crosshair,
+  Briefcase,
+  FileText,
+  Layers,
+  FlaskConical,
+  ArrowLeft
+} from "lucide-react";
 import {
   SegmentMode,
   ResearchTab,
@@ -84,54 +96,125 @@ export const AnalystDesk: React.FC<AnalystDeskProps> = ({
       }}
     >
       {/* Header Row: Title & Subtitle + View Mode Switcher */}
-      <div
-        className="fin-workspace-header flex items-center justify-between"
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
-      >
-        <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div className="w-5 h-5 flex items-center justify-center text-[#D6B75E]" style={{ width: 20, height: 20, color: "#D6B75E" }}>
-            <BarChart3 className="w-5 h-5" style={{ width: 20, height: 20 }} />
-          </div>
-          <div>
-            <h1 className="text-[16px] font-bold text-[#E7E9EC] leading-tight" style={{ fontSize: "16px", fontWeight: 700, color: "#E7E9EC", margin: 0, lineHeight: 1.15 }}>
-              Analyst
-            </h1>
-            <p className="text-[10px] text-[#929CA7]" style={{ fontSize: "10px", color: "#929CA7", margin: 0 }}>
-              AI-powered equity research, deep analysis, and actionable insights.
-            </p>
-          </div>
-        </div>
+      {(() => {
+        const navMeta: Record<string, { title: string; subtitle: string; icon: any; badge?: string }> = {
+          analyst: {
+            title: "Analyst",
+            subtitle: "AI-powered equity research, deep analysis, and actionable insights.",
+            icon: BarChart3
+          },
+          war_room: {
+            title: "Institutional War Room",
+            subtitle: "Multi-agent macro risk telemetry, crude oil volatility & interest rate sensitivity.",
+            icon: Crosshair,
+            badge: "Live Crisis Monitor"
+          },
+          portfolio: {
+            title: "Portfolio Intelligence Desk",
+            subtitle: "Multi-asset institutional holdings, factor exposures & real-time P&L attribution.",
+            icon: Briefcase
+          },
+          discover: {
+            title: "NSE Equity Screener & Discover",
+            subtitle: "Institutional quantitative filter engine across NSE & global securities.",
+            icon: Compass
+          },
+          brief: {
+            title: "Daily Morning Intelligence Brief",
+            subtitle: "Synthesized executive pre-market intelligence, index flows & earnings previews.",
+            icon: FileText
+          },
+          ecosystem: {
+            title: "Conglomerate & Competitor Ecosystem",
+            subtitle: "Deep multi-tier supply chain mapping, market share & peer benchmarks.",
+            icon: Layers
+          },
+          report: {
+            title: "Institutional Research Report Desk",
+            subtitle: "Multi-agent equity initiation notes, DCF models & valuation thesis.",
+            icon: FileText
+          },
+          backtest: {
+            title: "Quantitative Alpha Strategy Lab",
+            subtitle: "Statistical factor backtesting on multi-agent momentum & valuation models.",
+            icon: FlaskConical
+          }
+        };
+        const currentMeta = navMeta[activeNav || "analyst"] || navMeta.analyst;
+        const HeaderIcon = currentMeta.icon;
 
-        {/* 4-Way Segmented View Controls */}
-        <div
-          className="fin-switcher-pill h-[28px] p-0.5 rounded-[6px] bg-[#101A23] border border-[#26333D] flex items-center gap-0.5 text-[10px] font-medium"
-          style={{ display: "flex", alignItems: "center", gap: 2 }}
-        >
-          {SEGMENTS.map((seg) => {
-            const SegIcon = seg.icon;
-            const isSegActive = activeSegment === seg.id;
-            return (
-              <button
-                key={seg.id}
-                onClick={() => {
-                  onSegmentChange(seg.id);
-                  if (seg.id === "compare") setCompareModal(true);
-                  if (seg.id === "screener" && onNavChange) onNavChange("discover");
-                }}
-                className={`fin-switcher-btn h-full px-2.5 rounded-[4px] flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  isSegActive
-                    ? "active bg-[#1E1A11] border border-[#D6B75E] text-[#D6B75E] font-semibold"
-                    : "text-[#929CA7] hover:text-[#E7E9EC]"
-                }`}
-                style={{ display: "flex", alignItems: "center", gap: 6 }}
+        return (
+          <div
+            className="fin-workspace-header flex items-center justify-between"
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+          >
+            <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div className="w-5 h-5 flex items-center justify-center text-[#D6B75E]" style={{ width: 20, height: 20, color: "#D6B75E" }}>
+                <HeaderIcon className="w-5 h-5" style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <h1 className="text-[16px] font-bold text-[#E7E9EC] leading-tight" style={{ fontSize: "16px", fontWeight: 700, color: "#E7E9EC", margin: 0, lineHeight: 1.15 }}>
+                    {currentMeta.title}
+                  </h1>
+                  {currentMeta.badge && (
+                    <span
+                      className="px-2 py-0.5 rounded-full bg-[#E36B73] text-white text-[8.5px] font-bold uppercase tracking-wider"
+                      style={{ fontSize: "8.5px", fontWeight: 700, padding: "2px 8px", borderRadius: 9999, backgroundColor: "#E36B73", color: "#FFFFFF" }}
+                    >
+                      {currentMeta.badge}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-[#929CA7]" style={{ fontSize: "10px", color: "#929CA7", margin: 0 }}>
+                  {currentMeta.subtitle}
+                </p>
+              </div>
+            </div>
+
+            {/* 4-Way Segmented View Controls (when in Analyst) or Return button (when in other views) */}
+            {activeNav === "analyst" ? (
+              <div
+                className="fin-switcher-pill h-[28px] p-0.5 rounded-[6px] bg-[#101A23] border border-[#26333D] flex items-center gap-0.5 text-[10px] font-medium"
+                style={{ display: "flex", alignItems: "center", gap: 2 }}
               >
-                <SegIcon className="w-3 h-3" />
-                <span>{seg.label}</span>
+                {SEGMENTS.map((seg) => {
+                  const SegIcon = seg.icon;
+                  const isSegActive = activeSegment === seg.id;
+                  return (
+                    <button
+                      key={seg.id}
+                      onClick={() => {
+                        onSegmentChange(seg.id);
+                        if (seg.id === "compare") setCompareModal(true);
+                        if (seg.id === "screener" && onNavChange) onNavChange("discover");
+                      }}
+                      className={`fin-switcher-btn h-full px-2.5 rounded-[4px] flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        isSegActive
+                          ? "active bg-[#1E1A11] border border-[#D6B75E] text-[#D6B75E] font-semibold"
+                          : "text-[#929CA7] hover:text-[#E7E9EC]"
+                      }`}
+                      style={{ display: "flex", alignItems: "center", gap: 6 }}
+                    >
+                      <SegIcon className="w-3 h-3" />
+                      <span>{seg.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <button
+                onClick={() => onNavChange && onNavChange("analyst")}
+                className="fin-btn-back flex items-center gap-1.5 text-[10.5px] font-semibold"
+                style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 4, backgroundColor: "#131F29", border: "1px solid #26333D", color: "#D6B75E", cursor: "pointer" }}
+              >
+                <ArrowLeft className="w-3 h-3" />
+                <span>Return to Analyst Desk</span>
               </button>
-            );
-          })}
-        </div>
-      </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* If an alternate sidebar navigation item was selected, render its dedicated workspace */}
       {activeNav !== "analyst" ? (

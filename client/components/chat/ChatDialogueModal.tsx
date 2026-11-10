@@ -20,7 +20,21 @@ export const ChatDialogueModal: React.FC<ChatDialogueModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-14 right-80 w-96 rounded-[8px] bg-[#101A23] border border-[#26333D] shadow-2xl p-3 space-y-2 z-50">
+    <div
+      className="fin-modal-card fixed bottom-14 right-80 w-96 z-50 p-3 space-y-2"
+      style={{
+        position: "fixed",
+        bottom: 56,
+        right: 320,
+        width: 384,
+        backgroundColor: "#101A23",
+        border: "1px solid #26333D",
+        borderRadius: 8,
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.65)",
+        padding: "14px",
+        zIndex: 1000
+      }}
+    >
       <div className="flex items-center justify-between border-b border-[#26333D] pb-1.5">
         <span className="text-[11px] font-bold text-[#D6B75E] flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-[#D6B75E]" />

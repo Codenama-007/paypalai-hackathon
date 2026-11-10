@@ -21,8 +21,36 @@ export const RedirectModal: React.FC<RedirectModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm rounded-[8px] bg-[#101A23] border border-[#26333D] p-4 space-y-3 shadow-2xl">
+    <div
+      className="fin-modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "rgba(4, 7, 10, 0.82)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+        padding: "16px"
+      }}
+    >
+      <div
+        className="fin-modal-card w-full max-w-sm"
+        style={{
+          width: "100%",
+          maxWidth: 380,
+          backgroundColor: "#101A23",
+          border: "1px solid #26333D",
+          borderRadius: 8,
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.65)",
+          padding: "18px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px"
+        }}
+      >
         <div className="flex items-center justify-between border-b border-[#26333D] pb-2">
           <span className="text-[12px] font-bold text-[#E7E9EC] uppercase tracking-wider">
             Redirect Research Focus

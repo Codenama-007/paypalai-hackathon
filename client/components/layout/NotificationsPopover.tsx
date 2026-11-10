@@ -24,7 +24,22 @@ export const NotificationsPopover: React.FC<NotificationsPopoverProps> = ({
   };
 
   return (
-    <div className="absolute right-0 top-full mt-2 w-[340px] rounded-[8px] bg-[#101A23] border border-[#26333D] shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div
+      className="fin-popover-menu absolute right-0 top-full mt-2 w-[340px] z-50 overflow-hidden"
+      style={{
+        position: "absolute",
+        right: 0,
+        top: "100%",
+        marginTop: "8px",
+        width: 340,
+        backgroundColor: "#101A23",
+        border: "1px solid #26333D",
+        borderRadius: "8px",
+        boxShadow: "0 16px 40px rgba(0, 0, 0, 0.6)",
+        zIndex: 100,
+        overflow: "hidden"
+      }}
+    >
       {/* Popover Header */}
       <div className="p-3 border-b border-[#26333D] flex items-center justify-between bg-[#0B1219]">
         <div className="flex items-center gap-1.5">

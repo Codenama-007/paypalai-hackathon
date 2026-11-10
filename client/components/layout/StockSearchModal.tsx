@@ -30,10 +30,47 @@ export const StockSearchModal: React.FC<StockSearchModalProps> = ({
     : stockList;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-[500px] rounded-[10px] bg-[#101A23] border border-[#26333D] shadow-2xl overflow-hidden flex flex-col">
+    <div
+      className="fin-modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "rgba(4, 7, 10, 0.82)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+        padding: "16px"
+      }}
+    >
+      <div
+        className="fin-modal-card w-full max-w-[500px]"
+        style={{
+          width: "100%",
+          maxWidth: 500,
+          backgroundColor: "#101A23",
+          border: "1px solid #26333D",
+          borderRadius: 8,
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.65)",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
         {/* Search Bar Input */}
-        <div className="p-3.5 border-b border-[#26333D] flex items-center gap-2.5 bg-[#0B1219]">
+        <div
+          className="fin-modal-header p-3.5 border-b border-[#26333D] flex items-center gap-2.5"
+          style={{
+            padding: "12px 16px",
+            backgroundColor: "#0B1219",
+            borderBottom: "1px solid #26333D",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px"
+          }}
+        >
           <Search className="w-4 h-4 text-[#D6B75E] shrink-0" />
           <input
             type="text"
